@@ -1,0 +1,40 @@
+name: Flutter tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.22.1"
+
+      # ---- Linux-only system SQLite install ----
+      - name: Install libsqlite3 (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends libsqlite3-0
+
+      # ---- Project dependencies ----
+      - name: Get pub packages
+        run: flutter pub get
+        working-directory: kira_flutter_client
+
+      # ---- Run tests ----
+      - name: Run widget & unit tests
+        run: flutter test
+        working-directory: kira_flutter_client
