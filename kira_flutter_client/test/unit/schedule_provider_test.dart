@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kira_flutter_client/models/task_dto.dart';
 import 'package:kira_flutter_client/ui/schedule/schedule_provider.dart';
-import 'package:kira_flutter_client/ui/schedule/schedule_api.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -11,7 +11,15 @@ void main() {
     const MethodChannel('kira/node')
         .setMockMethodCallHandler((MethodCall methodCall) async => null);
 
-    final p = ScheduleProvider(testMode: true);
+    final p = ScheduleProvider(testSeed: [
+      TaskDto(
+        id: 1,
+        title: 'Mock',
+        start: DateTime.now(),
+        duration: 10,
+        status: 'pending',
+      )
+    ]);
     p.fetchToday(); // fake sync data
     expect(p.tasks.first.status, 'pending');
     p.updateStatus(p.tasks.first.id, 'done');
