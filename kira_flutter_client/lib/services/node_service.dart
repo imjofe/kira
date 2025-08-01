@@ -2,17 +2,19 @@ import 'package:flutter/services.dart';
 
 class NodeService {
   static final NodeService instance = NodeService._();
+  final MethodChannel _channel = const MethodChannel('kira/node');
 
   NodeService._();
 
-  Future<void> start() async =>
-    const MethodChannel('kira/node').invokeMethod('start', [
-      'node',
-      '/data/data/com.example.kira_flutter_client/files/flutter_assets/assets/node/server.js'
-    ]);
+  Future<void> sendFrame(Map<String, dynamic> frame) =>
+      _channel.invokeMethod('sendFrame', frame);
 
   Stream<String> stdout() {
-    // TODO: Implement stdout stream
-    return Stream.value('{"pong":1}');
+    // This is a placeholder. A real implementation would use an EventChannel.
+    return Stream.fromIterable(['{"pong":1}']);
+  }
+
+  Future<void> start() async {
+    await _channel.invokeMethod('start');
   }
 }
