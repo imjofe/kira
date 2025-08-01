@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'ui/chat_screen.dart';
+import 'package:kira_flutter_client/llm/llama_bridge.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: '.env');
+void main() {
   runApp(const KiraApp());
 }
 
@@ -14,9 +11,20 @@ class KiraApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Kira Goal Assistant',
-      theme: ThemeData(colorSchemeSeed: Colors.indigo),
-      home: const ChatScreen(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('LLM Test'),
+        ),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              final result = await Gemma3n.run('2+2=');
+              print('LLM Result: $result');
+            },
+            child: const Text('Run LLM'),
+          ),
+        ),
+      ),
     );
   }
 }

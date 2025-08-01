@@ -19,7 +19,7 @@ class WsService {
     _isDisposed = false;
     _onMessage = onMessage;
     final baseUrl = dotenv.env['API_BASE_URL'] ?? 'http://localhost:3000';
-    final uri = Uri.parse(baseUrl.replaceFirst('http', 'ws') + '/chat');
+    final uri = Uri.parse('${baseUrl.replaceFirst('http', 'ws')}/chat');
     _channel = WebSocketChannel.connect(uri);
     _sub = _channel!.stream.listen(
       (data) {
