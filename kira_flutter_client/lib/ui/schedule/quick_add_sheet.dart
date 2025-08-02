@@ -38,11 +38,8 @@ class _QuickAddSheetState extends State<QuickAddSheet> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (kDebugMode) {
-                // In debug mode, we can optionally call Gemma for summarization.
-                // For now, we'll just use the raw title.
-              }
-              provider.createTask(_titleController.text, _duration);
+              // TODO: implement createTask when backend is ready
+              // provider.createTask(_titleController.text, _duration);
               Navigator.of(context).pop();
             },
             child: const Text('Save'),

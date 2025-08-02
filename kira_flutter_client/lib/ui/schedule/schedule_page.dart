@@ -20,10 +20,7 @@ class SchedulePage extends StatelessWidget {
               onRefresh: provider.fetchToday,
               child: ListView.builder(
                 itemCount: tasks.length,
-                itemBuilder: (_, i) => TaskCard(
-                  task: tasks[i],
-                  testMode: provider.testMode,
-                ),
+                itemBuilder: (_, i) => TaskCard(task: tasks[i]),
               ),
             ),
             floatingActionButton: FloatingActionButton(

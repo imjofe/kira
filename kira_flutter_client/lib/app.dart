@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kira_flutter_client/bootstrap/kira_scaffold.dart';
+import 'package:kira_flutter_client/ui/calendar/calendar_provider.dart';
+import 'package:kira_flutter_client/ui/schedule/schedule_provider.dart';
+import 'package:provider/provider.dart';
 
 final _router = GoRouter(
   initialLocation: '/schedule',
@@ -18,13 +21,19 @@ class KiraApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Kira MVP',
-      theme: _lightTheme,
-      darkTheme: _darkTheme,
-      themeMode: ThemeMode.system,
-      routerConfig: _router,
-      debugShowCheckedModeBanner: false,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ScheduleProvider()..fetchToday()),
+        ChangeNotifierProvider(create: (_) => CalendarProvider()),
+      ],
+      child: MaterialApp.router(
+        title: 'Kira MVP',
+        theme: _lightTheme,
+        darkTheme: _darkTheme,
+        themeMode: ThemeMode.system,
+        routerConfig: _router,
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

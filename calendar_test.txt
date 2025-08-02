@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:kira_flutter_client/models/task_dto.dart';
+import 'package:kira_flutter_client/ui/calendar/calendar_page.dart';
+import 'package:kira_flutter_client/ui/calendar/calendar_provider.dart';
+import 'package:kira_flutter_client/ui/schedule/schedule_provider.dart';
+import 'package:provider/provider.dart';
+
+TaskDto _mock(DateTime when) => TaskDto(
+      id: when.day,
+      title: 'Task ${when.day}',
+      start: when,
+      duration: 30,
+      status: 'pending',
+    );
+
+void main() {
+  testWidgets('tap day shows tasks', (tester) async {
+    final monday = DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1));
+    final scheduleProvider = ScheduleProvider(testSeed: [
+      _mock(monday.add(const Duration(hours: 9))),
+      _mock(monday.add(const Duration(hours: 14))),
+    ])..fetchToday();
+
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: scheduleProvider),
+          ChangeNotifierProvider(create: (_) => CalendarProvider()),
+        ],
+        child: const MaterialApp(home: CalendarPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text(monday.day.toString()));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Task ${monday.day}'), findsOneWidget);
+  });
+}

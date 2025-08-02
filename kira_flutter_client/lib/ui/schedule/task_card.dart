@@ -8,21 +8,35 @@ class TaskCard extends StatelessWidget {
   const TaskCard({super.key, required this.task});
   final TaskDto task;
 
+  Widget _statusChip(String status) {
+    Color color;
+    switch (status) {
+      case 'done':
+        color = Colors.green;
+        break;
+      case 'skip':
+        color = Colors.grey;
+        break;
+      default:
+        color = Colors.blue;
+    }
+    return Chip(label: Text(status), backgroundColor: color);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.read<ScheduleProvider>();
 
-    return ListTile(
-      key: ValueKey('task_${task.id}'),
-      leading: Text(DateFormat.Hm().format(task.start)),
-      title: Text(task.title),
-      trailing: IconButton(
-        key: ValueKey('done_${task.id}'),
-        icon: Icon(
-          task.status == 'done' ? Icons.check_circle : Icons.radio_button_unchecked,
-          color: task.status == 'done' ? Colors.green : null,
-        ),
-        onPressed: () => provider.updateStatus(task.id, 'done'),
+    return Dismissible(
+      key: ValueKey(task.id),
+      direction: DismissDirection.endToStart,
+      dismissThresholds: const {DismissDirection.endToStart: 0.25},
+      background: Container(color: Colors.green, child: const Icon(Icons.check)),
+      onDismissed: (_) => provider.updateStatus(task.id, 'done'),
+      child: ListTile(
+        leading: Text(DateFormat.Hm().format(task.start)),
+        title: Text(task.title),
+        trailing: _statusChip(task.status),
       ),
     );
   }
