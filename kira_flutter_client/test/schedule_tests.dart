@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kira_flutter_client/llm/llama_bridge.dart';
 import 'package:provider/provider.dart';
 import 'package:kira_flutter_client/ui/schedule/schedule_provider.dart';
 import 'package:kira_flutter_client/ui/schedule/task_card.dart';
@@ -22,7 +23,7 @@ void main() {
       const MethodChannel('kira/node')
           .setMockMethodCallHandler((MethodCall methodCall) async => null);
 
-      final p = ScheduleProvider(testSeed: [_mock()]);
+      final p = ScheduleProvider(testSeed: [_mock()], gemma: LlamaBridge(testMode: true));
       await p.fetchToday();
       expect(p.tasks.first.status, 'pending');
       await p.updateStatus(1, 'done');
@@ -34,7 +35,7 @@ void main() {
     const MethodChannel('kira/node')
         .setMockMethodCallHandler((MethodCall methodCall) async => null);
 
-    final provider = ScheduleProvider(testSeed: [_mock()])..fetchToday();
+    final provider = ScheduleProvider(testSeed: [_mock()], gemma: LlamaBridge(testMode: true))..fetchToday();
 
     await tester.pumpWidget(
       ChangeNotifierProvider.value(

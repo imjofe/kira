@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kira_flutter_client/ui/goals/goal_card.dart';
 import 'package:kira_flutter_client/ui/goals/goal_edit_dialog.dart';
+import 'package:kira_flutter_client/llm/llama_bridge.dart';
 import 'package:kira_flutter_client/ui/goals/goals_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -10,7 +11,7 @@ class GoalsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => GoalsProvider()..fetch(),
+      create: (context) => GoalsProvider(gemma: context.read<LlamaBridge>())..fetch(),
       child: Consumer<GoalsProvider>(
         builder: (context, p, child) {
           Widget buildColumn(String title, List<GoalDto> items) => Expanded(

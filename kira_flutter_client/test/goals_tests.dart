@@ -1,3 +1,4 @@
+import 'package:kira_flutter_client/llm/llama_bridge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -23,7 +24,7 @@ void main() {
     });
 
     test('move() changes column correctly', () async {
-      final p = GoalsProvider(seed: [_mock()]);
+      final p = GoalsProvider(seed: [_mock()], gemma: LlamaBridge(testMode: true));
       await p.fetch(); // fetch uses the seed
       expect(p.backlog, isNotEmpty);
       await p.move(1, 'Done');
@@ -36,7 +37,7 @@ void main() {
   group('GoalsPage Widget Tests', () {
     testWidgets('tap ➡ moves goal to next column', (tester) async {
       // 1. Create provider with seed and fetch data
-      final provider = GoalsProvider(seed: [_mock()]);
+      final provider = GoalsProvider(seed: [_mock()], gemma: LlamaBridge(testMode: true));
       await provider.fetch();
 
       // 2. Pump the widget tree with the provider

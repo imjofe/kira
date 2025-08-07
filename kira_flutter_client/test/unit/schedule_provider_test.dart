@@ -1,3 +1,4 @@
+import 'package:kira_flutter_client/llm/llama_bridge.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kira_flutter_client/models/task_dto.dart';
@@ -11,15 +12,17 @@ void main() {
     const MethodChannel('kira/node')
         .setMockMethodCallHandler((MethodCall methodCall) async => null);
 
-    final p = ScheduleProvider(testSeed: [
-      TaskDto(
-        id: 1,
-        title: 'Mock',
-        start: DateTime.now(),
-        duration: 10,
-        status: 'pending',
-      )
-    ]);
+    final p = ScheduleProvider(
+        testSeed: [
+          TaskDto(
+            id: 1,
+            title: 'Mock',
+            start: DateTime.now(),
+            duration: 10,
+            status: 'pending',
+          )
+        ],
+        gemma: LlamaBridge(testMode: true));
     p.fetchToday(); // fake sync data
     expect(p.tasks.first.status, 'pending');
     p.updateStatus(p.tasks.first.id, 'done');

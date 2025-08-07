@@ -1,0 +1,97 @@
+# === LARGE FILES (GitHub size limits) ===
+*.gguf
+*.ggml
+*.bin
+*.model
+assets/models/
+kira_flutter_client/assets/models/
+
+# === Flutter/Dart ===
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/pubspec.lock
+**/.metadata
+
+# === Android ===
+**/android/.gradle/
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+**/android/gradle/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/key.properties
+**/*.keystore
+**/*.jks
+
+# EXCEPTION: Allow critical native libraries for LLM
+!kira_flutter_client/android/app/src/main/jniLibs/
+!kira_flutter_client/android/app/src/main/jniLibs/**/*.so
+
+# === iOS ===
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+
+# === Node.js ===
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+**/.env
+**/.env.local
+**/.env.production
+package-lock.json
+**/package-lock.json
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+venv/
+env/
+.venv/
+*.egg-info/
+
+# === IDE/Editor ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# === OS ===
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+
+# === Logs ===
+*.log
+logs/
+
+# === Native Libraries (will be downloaded separately) ===
+**/android/app/src/main/jniLibs/
+**/lib*.so
+**/lib*.dylib
+**/lib*.dll
+
+# === Test Coverage ===
+coverage/
+**/.nyc_output/
+
+# === Backup files ===
+*.bak
+*.backup
+*.orig

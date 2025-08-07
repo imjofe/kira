@@ -53,6 +53,41 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    aaptOptions {
+        noCompress(".gguf")
+    }
+
+    sourceSets {
+        getByName("main") {
+            assets.srcDirs("src/main/assets")
+        }
+    }
+    
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86_64")
+            isUniversalApk = true
+        }
+    }
+
+    // Add model files directly to assets without compression
+    applicationVariants.all {
+        val variant = this
+        val variantName = variant.name.capitalize()
+        
+        tasks.register<Copy>("copyModelAssets$variantName") {
+            from("src/main/arm64/assets/models")
+            into("${buildDir}/intermediates/assets/${variant.name}/arm64-v8a/models")
+            include("*.gguf")
+        }
+        
+        tasks.named("merge${variantName}Assets") {
+            dependsOn("copyModelAssets$variantName")
+        }
+    }
 }
 
 dependencies {

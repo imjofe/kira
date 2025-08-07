@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:kira_flutter_client/services/node_service.dart';
+import 'package:kira_flutter_client/llm/llama_bridge.dart';
+import 'package:kira_flutter_client/utils/prompt_builder.dart';
 
 class GoalDto {
   final int id;
@@ -25,10 +28,12 @@ class GoalDto {
 }
 
 class GoalsProvider extends ChangeNotifier {
-  GoalsProvider({this.seed});
+  GoalsProvider({this.seed, required this.gemma});
+  
   final List<GoalDto>? seed;
-
-  final _goals = <GoalDto>[];
+  final LlamaBridge gemma;
+  final List<GoalDto> _goals = [];
+  
   UnmodifiableListView<GoalDto> get backlog =>
       UnmodifiableListView(_goals.where((g) => g.column == 'Backlog'));
   UnmodifiableListView<GoalDto> get active =>
@@ -68,5 +73,11 @@ class GoalsProvider extends ChangeNotifier {
       'type': 'goal.create',
       'payload': {'title': title, 'description': desc}
     }));
+  }
+
+  Stream<String> runGoal(String userInput) {
+    final l1 = '<<MODULE:GOAL>> You manage a lightweight **Kanban board**. Columns: Backlog → Active → Done. No extra columns.';
+    final env = PromptBuilder.build(l1Persona: l1, userInput: userInput);
+    return gemma.run(prompt: jsonEncode(env));
   }
 }

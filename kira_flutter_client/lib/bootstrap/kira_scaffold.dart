@@ -5,6 +5,10 @@ import 'package:kira_flutter_client/ui/goals/goals_page.dart';
 import 'package:kira_flutter_client/ui/calendar/calendar_page.dart';
 import 'package:kira_flutter_client/ui/chat/chat_page.dart';
 import 'package:kira_flutter_client/ui/settings/settings_page.dart';
+import 'package:provider/provider.dart';
+import 'package:kira_flutter_client/ui/chat/chat_provider.dart';
+import 'package:kira_flutter_client/services/websocket_service.dart';
+import 'package:kira_flutter_client/llm/llama_bridge.dart';
 
 class KiraScaffold extends StatefulWidget {
   const KiraScaffold({super.key, required this.tab});
@@ -50,12 +54,19 @@ class _KiraScaffoldState extends State<KiraScaffold> {
 
     final body = IndexedStack(
       index: _index,
-      children: const [
-        SchedulePage(),
-        GoalsPage(),
-        CalendarPage(),
-        ChatPage(),
-        SettingsPage(),
+      children: [
+        const SchedulePage(),
+        const GoalsPage(),
+        const CalendarPage(),
+        // Hot-reload note: If ProviderNotFound error, hot-restart app.
+        ChangeNotifierProvider(
+          create: (context) => ChatProvider(
+            ws: WebSocketService(),
+            gemma: context.read<LlamaBridge>(),
+          )..initCache(),
+          child: const ChatPage(),
+        ),
+        const SettingsPage(),
       ],
     );
 

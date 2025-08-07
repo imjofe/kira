@@ -1,0 +1,9 @@
+{
+  "messages": [
+    {"role":"system","content":"<GLOBAL>"},
+    {"role":"system","content":"<<MODULE:QuickAdd>> Return a single **JSON TaskCreate** with `title` (≤6 words) & `duration` (int, minutes). No commentary."},
+    {"role":"user","content":"Buy groceries tomorrow at 5"},
+    {"role":"system","content":"/mode=json","name":"ephemeral"}
+  ],
+  "metadata":{"prompt_version":"1.1","require_json":true}
+}

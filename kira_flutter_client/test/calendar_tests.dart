@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kira_flutter_client/llm/llama_bridge.dart';
 import 'package:kira_flutter_client/models/task_dto.dart';
 import 'package:kira_flutter_client/ui/calendar/calendar_page.dart';
 import 'package:kira_flutter_client/ui/calendar/calendar_provider.dart';
@@ -21,10 +22,13 @@ void main() {
     final seedDay = DateTime(2025, 1, 1); // A fixed Wednesday
 
     // 2. ARRANGE: Seed the provider with tasks on that specific day
-    final scheduleProvider = ScheduleProvider(testSeed: [
-      _mock(seedDay.add(const Duration(hours: 9))),
-      _mock(seedDay.add(const Duration(hours: 14))),
-    ])..fetchToday();
+    final scheduleProvider = ScheduleProvider(
+      testSeed: [
+        _mock(seedDay.add(const Duration(hours: 9))),
+        _mock(seedDay.add(const Duration(hours: 14))),
+      ],
+      gemma: LlamaBridge(testMode: true),
+    )..fetchToday();
 
     // 3. ARRANGE: Pump the widget tree with the seeded providers
     await tester.pumpWidget(
@@ -32,7 +36,9 @@ void main() {
         providers: [
           ChangeNotifierProvider.value(value: scheduleProvider),
           // Ensure the calendar is focused on the same day
-          ChangeNotifierProvider(create: (_) => CalendarProvider(seed: seedDay)),
+          ChangeNotifierProvider(
+              create: (_) =>
+                  CalendarProvider(seed: seedDay, gemma: LlamaBridge(testMode: true))),
         ],
         child: const MaterialApp(home: CalendarPage(testing: true)), // enable keys
       ),
