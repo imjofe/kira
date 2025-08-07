@@ -15,6 +15,12 @@ kira_flutter_client/assets/models/
 **/pubspec.lock
 **/.metadata
 
+# === Platform-specific generated files ===
+**/generated_plugin_registrant.cc
+**/generated_plugin_registrant.h
+**/generated_plugins.cmake
+**/GeneratedPluginRegistrant.swift
+
 # === Android ===
 **/android/.gradle/
 **/android/app/debug/
@@ -28,9 +34,9 @@ kira_flutter_client/assets/models/
 **/*.keystore
 **/*.jks
 
-# EXCEPTION: Allow critical native libraries for LLM
-!kira_flutter_client/android/app/src/main/jniLibs/
-!kira_flutter_client/android/app/src/main/jniLibs/**/*.so
+# EXCEPTION: Include critical native libraries for LLM (override the above pattern)
+!**/android/app/src/main/jniLibs/
+!**/android/app/src/main/jniLibs/**/*.so
 
 # === iOS ===
 **/ios/Flutter/Generated.xcconfig
